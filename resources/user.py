@@ -124,10 +124,14 @@ class UserLoginResource(Resource) :
             return {"error" : str(e)}, 503
 
         # 이메일 유효성 확인
+        # 이 이메일의 유저가 없으면 
+        # 클라이언트에 이 이메일은 회원이 아니라고 응답해준다.
         if len(result_list) != 1 :
             return {"error" : "회원가입이 안된 이메일입니다."}, 400
 
         # 비밀번호 확인
+
+        # 디비에 저장되어 있는 유저 정보
         user_info = result_list[0]
         print(user_info)
 
@@ -137,6 +141,7 @@ class UserLoginResource(Resource) :
         if check == False :
             return {"error" : "비밀번호가 일치하지 않습니다."} 
 
+        # JWT 억세스 토큰 생성해서 리턴해준다.
         access_token = create_access_token(user_info['id'])
 
         return {"result" : "success", "access_token" : access_token}, 200   
