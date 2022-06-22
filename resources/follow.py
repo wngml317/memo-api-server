@@ -17,10 +17,12 @@ class FollowListResource(Resource) :
             follower_id = get_jwt_identity()
 
     
-            query = '''select m.user_id, m.title, m.date, m.content
-                        from memo m
-                        join follow f
-                            on m.user_id = f.followee_id
+            query = '''select u.name, m.user_id, m.title, m.date, m.content, m.created_at, m.updated_at
+                            from memo m
+                            join follow f
+                                on m.user_id = f.followee_id
+                            join user u
+                                on m.user_id = u.id
                             where f.follower_id=%s;'''
             record = (follower_id, )
 
@@ -40,6 +42,8 @@ class FollowListResource(Resource) :
             i=0
             for record in result_list :
                 result_list[i]['date'] = record['date'].isoformat()
+                result_list[i]['created_at'] = record['created_at'].isoformat()
+                result_list[i]['updated_at'] = record['updated_at'].isoformat()
                 i = i + 1   
 
             cursor.close()
