@@ -82,10 +82,8 @@ class FollowResource(Resource) :
 
             result_list = cursor.fetchall()
 
-            user = result_list
-            #print(user)
 
-            if len(user) != 2 :
+            if len(result_list) != 2 :
                 
                 cursor.close()
                 connection.close()
