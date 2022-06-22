@@ -15,6 +15,7 @@ class FollowResource(Resource) :
         follower_id = get_jwt_identity()
 
         try :
+            # 1) 디비에 연결
             connection = get_connection()
 
             # {
@@ -62,7 +63,7 @@ class FollowResource(Resource) :
                 connection.close()
                 return {"error" : "이미 팔로우를 했습니다."}
 
-
+            # 2) 쿼리문 만들기
             query = '''insert into follow
                         (follower_id, followee_id)
                         values
@@ -70,11 +71,20 @@ class FollowResource(Resource) :
             
             record = (follower_id, data['followee_id'])
 
+            # 3) 커서를 가져온다.
             cursor = connection.cursor()
+
+            # 4) 쿼리문을 커서를 이용하여 실행
             cursor.execute(query, record)
+
+            # 5) 커넥션을 커밋해준다. -> 디비에 영구적으로 반영
             connection.commit()
+
+            # 5-1) 디비에 저장된 아이디값 가져오기
+            user_id = cursor.lastrowid
+
+            # 6) 자원 해제
             cursor.close()
-            connection.close()
         
         except mysql.connector.Error as e :
             print(e)

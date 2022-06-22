@@ -107,7 +107,6 @@ class UserLoginResource(Resource) :
             cursor.execute(query, record)
 
             result_list = cursor.fetchall()
-            print(result_list)
 
             i=0
             for record in result_list :

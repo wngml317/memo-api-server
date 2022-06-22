@@ -5,8 +5,7 @@ from config import Config
 from resources.follow import FollowResource
 from resources.follow_info import FolloweeResource
 
-from resources.memo import MemoListResource
-from resources.memo_info import MemoResource
+from resources.memo import MemoInfoResource, MemoListResource
 from resources.user import UserLoginResource, UserLogoutResource, UserRegisterResource, jwt_blacklist
 
 app = Flask(__name__)
@@ -25,11 +24,11 @@ def check_if_token_is_revoked(jwt_header, jwt_payload) :
 
 api = Api(app)
 
-api.add_resource(MemoListResource, '/memos')
-api.add_resource(MemoResource, '/memos/<int:memo_id>')
 api.add_resource(UserRegisterResource, '/users/register')
 api.add_resource(UserLoginResource, '/users/login')
 api.add_resource(UserLogoutResource, '/users/logout')
+api.add_resource(MemoListResource, '/memos')
+api.add_resource(MemoInfoResource, '/memos/<int:memo_id>')
 api.add_resource(FollowResource, '/follows')
 api.add_resource(FolloweeResource, '/follows/<int:followee_id>')
 
